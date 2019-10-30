@@ -1,7 +1,7 @@
 <?php
 $con = null;
 $url = "localhost";
-$username = "root";
+$username = "";
 $password = "";
 $DBname = "tech_support";
 
