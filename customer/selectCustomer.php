@@ -13,17 +13,18 @@ $table = "customers";
 $PK_field = "customerID";
 $PK_masked = true;
 $query;
+$selectSubmission;
 $return_fields = array("customerID", "CONCAT(firstName,' ', lastname)", "email", "city");
 
 //Form Info
 $method = "GET";
-$action = "updateCustomer.php";
+$action = "selectCustomer.php";
                     
-//Update Form       $con, $table,$update_field, $key, $key_value,$new_value
-if($method=="GET"){//$con, $type, $key=null, $key_value=null,$table=null, $update_field=null, $new_value
+//Update Form       
+if($method=="GET"){
     if(!empty($_GET['lastName'])) $query = getQuery($table,$return_fields,"lastName",$_GET['lastName']);
 } else if($method=="POST"){
-    if(!empty($_POST['lastName'])) echo $_POST['lastName'];
+    if(!empty($_POST['lastName'])) $query = getQuery($table,$return_fields,"lastName",$_POST['lastName']);
 }
 
 //Form
@@ -33,12 +34,15 @@ echo "<form method='".$method."' action='".$action."'>";
     forceTableStructure($label, $field);
 echo "</form>";
 
+//Result
 if(!empty($query)){
     //Retrieve Record Values
     echo "<h1>Result</h1>";
     $headers =array("Name", "Email", "City");
-    query_table($con, $table, $query, $method, $action,$headers, makeButton("foo", "Select"),$PK_field,$PK_masked);
+    if(!query_table($con, $table, $query, $method, "updateCustomer.php",$headers, makeButton("foo", "Select","updateCustomer.php"),$PK_field,$PK_masked))
+        echo "<span>No Records Found</span>";
 }
+
 //Close Connection
 closeConnection();
 
